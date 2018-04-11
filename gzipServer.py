@@ -8,7 +8,7 @@ import time
 import sys
 import BaseHTTPServer
 import gzip
-import simplejson as json
+import json
 import argparse
 
 HOST_NAME = '127.0.0.1'
