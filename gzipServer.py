@@ -70,12 +70,17 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       s.end_headers()
 
       print time.asctime() + "\tReceived submission #" + str(gReportCount) + ":", str(length), "bytes. Saved in", filename
+      if gArgs.printHeaders:
+          for h in s.headers:
+              print h + ": " + s.headers[h]
 
 parser = argparse.ArgumentParser(description="Telemetry test server.")
 parser.add_argument("-p", "--port", dest="port", default=80, type=int,
                     help="The port to listen on.")
 parser.add_argument("-r", "--raw-pings", dest="saveRawPings", action="store_true",
                     help="Store the raw pings instead of pretty formatting.")
+parser.add_argument("-H", "--headers", dest="printHeaders", action="store_true",
+                    help="Print the headers of received requests")
 gArgs = parser.parse_args()
 
 server_class = BaseHTTPServer.HTTPServer
