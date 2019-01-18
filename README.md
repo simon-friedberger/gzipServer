@@ -21,4 +21,3 @@ Note: The procedure above will create a "test ping", which is equivalent to a re
 1. You can also get the full ping from the DevTools console by opening the about:telemetry page and running the commands:  
    `Cu.import("resource://gre/modules/TelemetrySession.jsm");`  
   `ping = TelemetrySession.getPayload()`
-1. If you need Telemetry from the content process in the ping as well, call `TelemetrySession.requestChildPayloads()` before you call `TelemetrySession.getPayload()`. 
