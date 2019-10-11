@@ -6,7 +6,7 @@
 #
 import time
 import sys
-import BaseHTTPServer
+import http.server
 import gzip
 import json
 import argparse
@@ -16,7 +16,7 @@ HOST_NAME = '127.0.0.1'
 gPort = 80
 gReportCount = 0
 
-class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class HTTPHandler(http.server.BaseHTTPRequestHandler):
 
     #
     # Boilerplate web server, for testing with browser
@@ -69,10 +69,10 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       s.send_header("Content-type", "text/html")
       s.end_headers()
 
-      print time.asctime() + "\tReceived submission #" + str(gReportCount) + ":", str(length), "bytes. Saved in", filename
+      print(time.asctime() + "\tReceived submission #" + str(gReportCount) + ":", str(length), "bytes. Saved in", filename)
       if gArgs.printHeaders:
           for h in s.headers:
-              print h + ": " + s.headers[h]
+              print(h + ": " + s.headers[h])
 
 parser = argparse.ArgumentParser(description="Telemetry test server.")
 parser.add_argument("-p", "--port", dest="port", default=80, type=int,
@@ -83,7 +83,7 @@ parser.add_argument("-H", "--headers", dest="printHeaders", action="store_true",
                     help="Print the headers of received requests")
 gArgs = parser.parse_args()
 
-server_class = BaseHTTPServer.HTTPServer
+server_class = http.server.HTTPServer
 httpd = server_class((HOST_NAME, gArgs.port), HTTPHandler)
-print "%s\tServer started - %s:%s" % (time.asctime(), HOST_NAME, gArgs.port)
+print("%s\tServer started - %s:%s" % (time.asctime(), HOST_NAME, gArgs.port))
 httpd.serve_forever()
