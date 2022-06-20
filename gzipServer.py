@@ -13,7 +13,7 @@ import argparse
 
 HOST_NAME = '127.0.0.1'
 
-gPort = 80
+gPort = None
 gReportCount = 0
 
 class HTTPHandler(http.server.BaseHTTPRequestHandler):
@@ -38,6 +38,7 @@ class HTTPHandler(http.server.BaseHTTPRequestHandler):
         s.wfile.write("</html>")
 
     def do_POST(s):
+      global gPort
       global gReportCount
       global gArgs
       gReportCount += 1
@@ -56,7 +57,7 @@ class HTTPHandler(http.server.BaseHTTPRequestHandler):
       else:
         plainData = postData
 
-      filename = "report" + str(gReportCount) + ".json"
+      filename = f"port_{gPort}_report{gReportCount:03}.json"
       plainFile = open(filename, "w")
       if gArgs.saveRawPings:
         plainFile.write(plainData)
@@ -83,6 +84,7 @@ parser.add_argument("-H", "--headers", dest="printHeaders", action="store_true",
                     help="Print the headers of received requests")
 gArgs = parser.parse_args()
 
+gPort = gArgs.port
 server_class = http.server.HTTPServer
 httpd = server_class((HOST_NAME, gArgs.port), HTTPHandler)
 print("%s\tServer started - %s:%s" % (time.asctime(), HOST_NAME, gArgs.port))
